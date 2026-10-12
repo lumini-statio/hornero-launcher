@@ -1,0 +1,85 @@
+/* Paleta: crema 70% (fondo y superficies) / marrón cálido 30% (acentos) */
+.root {
+    -gorrion-cream: #F5EBD7;
+    -gorrion-cream-light: #FBF6EA;
+    -gorrion-cream-dark: #E6D5B5;
+    -gorrion-brown: #8A5A3B;
+    -gorrion-brown-hover: #9D6A47;
+    -gorrion-brown-dark: #5E3B24;
+
+    -fx-font-family: "Noto Sans", "Segoe UI", "Ubuntu", sans-serif;
+}
+
+.gorrion-root {
+    -fx-background-color: -gorrion-cream;
+}
+
+.welcome-label {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -gorrion-brown-dark;
+}
+
+/* Tarjeta flotante */
+.card {
+    -fx-background-color: -gorrion-cream-light;
+    -fx-background-radius: 12;
+    -fx-border-color: -gorrion-cream-dark;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(94, 59, 36, 0.18), 16, 0, 0, 4);
+}
+
+/* Base de los botones */
+.btn-gorrion {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 10;
+    -fx-effect: dropshadow(gaussian, rgba(94, 59, 36, 0.25), 10, 0, 0, 3);
+}
+
+.btn-gorrion:hover {
+    -fx-translate-y: -1;
+    -fx-effect: dropshadow(gaussian, rgba(94, 59, 36, 0.35), 14, 0, 0, 5);
+}
+
+.btn-gorrion:pressed {
+    -fx-translate-y: 1;
+    -fx-effect: dropshadow(gaussian, rgba(94, 59, 36, 0.2), 6, 0, 0, 1);
+}
+
+/* Principal: marrón sólido */
+.btn-gorrion-primary,
+.btn-gorrion-primary:focused {
+    -fx-background-color: -gorrion-brown;
+    -fx-text-fill: -gorrion-cream-light;
+    -fx-border-color: transparent;
+}
+.btn-gorrion-primary:hover,
+.btn-gorrion-primary:pressed {
+    -fx-background-color: -gorrion-brown-hover;
+    -fx-text-fill: -gorrion-cream-light;
+}
+.btn-gorrion-primary .ikonli-font-icon {
+    -fx-icon-color: -gorrion-cream-light;
+}
+
+/* Secundario: crema oscuro con borde marrón */
+.btn-gorrion-secondary,
+.btn-gorrion-secondary:focused {
+    -fx-background-color: -gorrion-cream-dark;
+    -fx-text-fill: -gorrion-brown-dark;
+    -fx-border-color: -gorrion-brown;
+    -fx-border-width: 1;
+}
+.btn-gorrion-secondary:hover,
+.btn-gorrion-secondary:pressed {
+    -fx-background-color: -gorrion-cream-light;
+    -fx-text-fill: -gorrion-brown-dark;
+}
+.btn-gorrion-secondary .ikonli-font-icon {
+    -fx-icon-color: -gorrion-brown;
+}
