@@ -7,23 +7,24 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.application.Application;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.IO.println;
 
 public class ServicioVersiones {
-    public static Map<String, VersionInfo> encontrarVersionCoincidente(String versionBuscada)
+    public Map<String, VersionInfo> encontrarVersionCoincidente(String versionBuscada)
             throws IOException {
 
         JsonObject data;
-        try (Reader reader = Files.newBufferedReader(Path.of("/con/eluna/hornerolauncher/data/versiones.json"), StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of("/com/eluna/hornerolauncher/data/versiones.json"), StandardCharsets.UTF_8)) {
             data = JsonParser.parseReader(reader).getAsJsonObject();
         }
 
@@ -43,16 +44,12 @@ public class ServicioVersiones {
         return parecidas;
     }
 
-    public static boolean descargarVersion(Map<String, String> version) {
-        try {
-            String versionName = version.get("version");
-            Path jsonVersionPath = Path.of(GlobalConfig.so, "versions", versionName, versionName, versionName + ".json");
-            DescargarVersion threadDescarga = new DescargarVersion(jsonVersionPath, version);
-            threadDescarga.start();
-            return true;
-        } catch (Exception e) {
-            println(new RuntimeException(e));
-            return false;
-        }
+    public static Path rutaJson(String versionNombre) {
+        return Path.of(GlobalConfig.baseMCPath.toString(),
+                "versions", versionNombre, versionNombre, versionNombre + ".json");
+    }
+
+    public static DescargarVersion descargarVersion(Map<String, String> version) {
+        return new DescargarVersion(rutaJson(version.get("version")), version);
     }
 }
