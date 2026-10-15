@@ -37,7 +37,7 @@
                 <Insets top="20.0"/>
             </BorderPane.margin>
 
-            <Button text="Descargar" onAction="#descargar"
+            <Button text="Descargar" fx:id="botonDescargar" onAction="#descargar"
                     styleClass="btn, btn-gorrion, btn-gorrion-secondary"
                     maxWidth="Infinity" HBox.hgrow="ALWAYS">
                 <graphic>
@@ -45,7 +45,7 @@
                 </graphic>
             </Button>
 
-            <Button text="Jugar" onAction="#ejecutarJuego"
+            <Button text="Jugar" fx:id="botonEjecutar" onAction="#ejecutarJuego"
                     styleClass="btn, btn-gorrion, btn-gorrion-primary"
                     maxWidth="Infinity" HBox.hgrow="ALWAYS">
                 <graphic>
