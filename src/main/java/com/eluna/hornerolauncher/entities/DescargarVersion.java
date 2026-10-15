@@ -1,18 +1,14 @@
 package com.eluna.hornerolauncher.entities;
 
 import com.eluna.hornerolauncher.GlobalConfig;
-import com.eluna.hornerolauncher.utils.dto.VersionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.concurrent.Task;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -23,10 +19,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.time.Duration;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DescargarVersion extends Thread {
+public class DescargarVersion extends Task<String> {
 
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(30))
@@ -103,12 +98,11 @@ public class DescargarVersion extends Thread {
         return hex.toString();
     }
 
+
+
     @Override
-    public void run() {
-        try {
-            descargarVersion();
-        } catch (Exception e) {
-            throw new RuntimeException("Error en la ejecución del programa: \n" + e);
-        }
+    protected String call() throws Exception {
+        // devuelve el sha1
+        return descargarVersion();
     }
 }
