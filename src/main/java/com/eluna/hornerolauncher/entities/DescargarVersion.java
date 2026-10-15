@@ -1,5 +1,6 @@
 package com.eluna.hornerolauncher.entities;
 
+import com.eluna.hornerolauncher.GlobalConfig;
 import com.eluna.hornerolauncher.utils.dto.VersionInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +38,16 @@ public class DescargarVersion extends Thread {
             .disableHtmlEscaping()
             .create();
 
-    public static String descargarVersion(String jsonVersion, Map<String, String> version, String base)
+    private final Path jsonVersionPath;
+
+    private final Map<String, String> version;
+
+    public DescargarVersion(Path jsonVersionPath, Map<String, String> version) {
+        this.jsonVersionPath = jsonVersionPath;
+        this.version = version;
+    }
+
+    public String descargarVersion()
             throws Exception {
 
         HttpRequest reqJson = HttpRequest.newBuilder(URI.create(version.get("url"))).GET().build();
@@ -45,14 +55,15 @@ public class DescargarVersion extends Thread {
 
         JsonObject data = JsonParser.parseString(res.body()).getAsJsonObject();
 
-        Path jsonPath = Paths.get(jsonVersion);
-        if (jsonPath.getParent() != null) {
-            Files.createDirectories(jsonPath.getParent());
+        if (jsonVersionPath.getParent() != null) {
+            Files.createDirectories(jsonVersionPath.getParent());
         }
-        Files.writeString(jsonPath, GSON.toJson(data), StandardCharsets.UTF_8);
+
+        // se guardan los datos del json en el archivo de la misma versión <version>.json.
+        Files.writeString(jsonVersionPath, GSON.toJson(data), StandardCharsets.UTF_8);
 
         // leer el json guardado y sacar la url del cliente
-        JsonObject leido = JsonParser.parseString(Files.readString(jsonPath, StandardCharsets.UTF_8))
+        JsonObject leido = JsonParser.parseString(Files.readString(jsonVersionPath, StandardCharsets.UTF_8))
                 .getAsJsonObject();
         JsonObject downloads = leido.getAsJsonObject("downloads");
         String cliente = downloads.getAsJsonObject("client").get("url").getAsString();
@@ -70,8 +81,8 @@ public class DescargarVersion extends Thread {
             throw new RuntimeException("HTTP " + resJar.statusCode() + " al descargar " + cliente);
         }
 
-        String v = version.get("version");
-        Path jar = Paths.get(base, "versions", v, v + ".jar");
+        String versionNumber = version.get("version");
+        Path jar = Paths.get(String.valueOf(GlobalConfig.baseMCPath), "versions", versionNumber, versionNumber + ".jar");
         Files.createDirectories(jar.getParent());
 
         // descargar cliente jar
@@ -90,5 +101,14 @@ public class DescargarVersion extends Thread {
             hex.append(String.format("%02x", b));
         }
         return hex.toString();
+    }
+
+    @Override
+    public void run() {
+        try {
+            descargarVersion();
+        } catch (Exception e) {
+            throw new RuntimeException("Error en la ejecución del programa: \n" + e);
+        }
     }
 }
