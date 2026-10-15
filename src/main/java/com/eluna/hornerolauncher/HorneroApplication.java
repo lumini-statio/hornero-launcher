@@ -1,4 +1,4 @@
-package com.eluna.hornerolauncher.views;
+package com.eluna.hornerolauncher;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
