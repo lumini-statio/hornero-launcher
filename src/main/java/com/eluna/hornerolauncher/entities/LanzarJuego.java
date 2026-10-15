@@ -1,29 +1,26 @@
 package com.eluna.hornerolauncher.entities;
 
 import com.eluna.hornerolauncher.GlobalConfig;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
-import java.io.IOException;
-import java.net.URL;
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-@AllArgsConstructor
 public class LanzarJuego extends Thread {
     private String script;
 
-    private Path rutaScript(String recurso) throws Exception {
-        URL url = LanzarJuego.class.getResource(recurso);
-        if (url == null) {
-            throw new IOException("No se encontró el recurso: " + recurso);
-        }
-        return Path.of(url.toURI());
+    public LanzarJuego(String rutaScript) {
+        this.script = rutaScript;
     }
 
     public void lanzarJuego()
             throws Exception {
-        Path scriptReal = rutaScript(this.script);
+        Path scriptReal = Path.of(this.script);
+
+        if (!Files.exists(scriptReal)) {
+            throw new FileNotFoundException("No se encontró el script: " + scriptReal);
+        }
+
         ProcessBuilder pb;
         if (GlobalConfig.so.contains("linux")) {
             pb = new ProcessBuilder("bash", scriptReal.toString());
@@ -33,12 +30,17 @@ public class LanzarJuego extends Thread {
             throw new UnsupportedOperationException("Sistema operativo no compatible");
         }
 
+        pb.directory(GlobalConfig.baseMCPath.toFile());
         pb.inheritIO();
         int codigo = pb.start().waitFor();
+        IO.println("El juego terminó con código: "+codigo);
     }
 
-    @SneakyThrows
     public void run() {
-        lanzarJuego();
+        try {
+            lanzarJuego();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
